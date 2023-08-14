@@ -1,5 +1,5 @@
 import React from "react";
-
+import Logo from '../assets/logo.png'
 function NavBar() {
   return (
     <>
@@ -8,7 +8,7 @@ function NavBar() {
           <div class="site-logo-canvas">
             <img
               className="logo-img"
-              src="src/assets/logo.png"
+              src={Logo}
               alt="Belmon Hospital"
             />
           </div>
