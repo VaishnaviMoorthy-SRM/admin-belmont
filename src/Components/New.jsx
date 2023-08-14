@@ -5,9 +5,8 @@ const New = () => {
     return (
       <div className="container">
         <div className="leftDiv">
-{/*         
-        <div className=" left-side-gradient-div"> </div>
-        <div className=" right-side-gradient-div"> </div> */}
+        <div className="circle circle1"></div>
+      <div className="circle circle2"></div>
         <div className="hero-div2">
           <h1 className="hero-title2">
             Your Mental <br></br> Health Matters
