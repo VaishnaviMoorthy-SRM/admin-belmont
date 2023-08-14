@@ -8,7 +8,7 @@ function NavBar() {
           <div class="site-logo-canvas">
             <img
               className="logo-img"
-              src="src\assets\logo.png"
+              src="src/assets/logo.png"
               alt="Belmon Hospital"
             />
           </div>
