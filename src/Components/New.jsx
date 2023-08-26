@@ -1,37 +1,30 @@
-import React from "react";
 import "./styles.css";
 import axios from "axios";
-
+import React, { useState, useEffect } from "react";
 const New = () => {
+
+  const [Patient,setPatientId] = useState("")
+  const handlePatientID = (e) =>{
+    setPatientId(e.target.value);
+
+  }
   const handleSubmit = () => {
     // event.preventDefault();
+    console.log(Patient);
+    let arg = Patient;
+    const apiURL = `https://us-east-1.aws.data.mongodb-api.com/app/application-0-erzts/endpoint/find?arg1=${arg}`;
 
-    const apiURL =
-      "https://ap-south-1.aws.data.mongodb-api.com/app/data-ckqiw/endpoint/data/v1/action/findOne";
-    const apiKeey =
-      "F70QwGblFVQJIoXQzhbqQotwUmmFMlds6Rl6J8FNLzB1RmK4ytSnoYxfRtXsO2dy";
-    const postData = {
-      collection: "stats",
-      database: "health",
-      dataSource: "Cluster0",
-      filter: { UR: 27147 },
-    };
     axios
-      .post(apiURL, postData, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "x-api-key": apiKeey,
-        },
-      })
+      .get(apiURL)
       .then((response) => {
-        console.log("Post request successful:", response.data);
+        console.log("Get request successful:", response.data);
         // Reset the form after successful submission
-        // setPostData({ name: "", description: "" });
       })
       .catch((error) => {
-        console.error("Error posting data:", error);
+        console.error("Error Getting data:", error);
       });
+
+      
   };
 
   return (
@@ -62,8 +55,8 @@ const New = () => {
         <div className="card2">
           <h1 className="title2">Enter the following Details</h1>
           <div className="inputGroup2">
-            <label for="Age">Patient ID :</label>
-            <input type="email" placeholder="Enter Patient ID" id="email" />
+            <label for="PatientID">Patient ID :</label>
+            <input type="text" placeholder="Enter Patient ID" id="PatientID" onChange={(e)=>handlePatientID(e)}/>
           </div>
 
           <button className="button-292" onClick={handleSubmit}>
