@@ -4,7 +4,10 @@ import React, { useState, useEffect } from "react";
 const New = () => {
   const [Patient, setPatientId] = useState("");
   const [isCalled, setIsCalled] = useState(false);
-  const [apiOutput, setModelOutput] = useState({});
+
+  const [outputRX, setRX] = useState("");
+  const [outputfinaldep, setdep] = useState("");
+  const [outputses, setses] = useState("");
 
   let Patientstat = { age: 0, rmt: 0.0, dep: 0 };
   let modelOutput = { RX: 0, final_depression: 0, no_of_session: 0 };
@@ -46,8 +49,10 @@ const New = () => {
         modelOutput["final_depression"] = response.data["final_depression"];
         modelOutput["no_of_session"] = response.data["no_of_session"];
         console.log("second call to model", modelOutput);
-        setModelOutput(modelOutput);
-        console.log("usestate data", apiOutput);
+
+        setRX(modelOutput.RX);
+        setdep(modelOutput.final_depression);
+        setses(modelOutput.no_of_session);
         // Reset the form after successful submission
       })
       .catch((error) => {
@@ -57,6 +62,9 @@ const New = () => {
     setIsCalled(true);
   };
 
+  const handleBack = () => {
+    setIsCalled(false);
+  };
   return (
     <div className="container">
       <div className="leftDiv">
@@ -79,9 +87,12 @@ const New = () => {
       <div className="rightDiv">
         {isCalled ? (
           <div>
-            <h1 className="title2">RX#10 : {}</h1>
-            <h1 className="title2">Final Depression : {}</h1>
-            <h1 className="title2">No of Sessions : {}</h1>
+            <h1 className="title2">RX#10 : {outputRX}</h1>
+            <h1 className="title2">Final Depression : {outputfinaldep}</h1>
+            <h1 className="title2">No of Sessions : {outputses}</h1>
+            <button className="button-292" onClick={handleBack}>
+              <span>Back</span>
+            </button>
           </div>
         ) : (
           <div className="card2">
