@@ -29,7 +29,12 @@ const New = () => {
     const modelURL = `http://127.0.0.1:5000/god?age=${Patientstat["age"]}&rmt=${Patientstat["rmt"]}&dep=${Patientstat["dep"]}`;
 
     await axios
-      .get(modelURL)
+      .get(
+        modelURL,
+        (Headers = {
+          "Access-Control-Allow-Origin": "*",
+        })
+      )
       .then((response) => {
         console.log("Get request successful:", response.data);
         // Reset the form after successful submission
