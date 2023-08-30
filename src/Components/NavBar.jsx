@@ -5,7 +5,7 @@ function NavBar() {
     <>
       <nav>
         <a href="https://belmontprivate.com.au/">
-          <div class="site-logo-canvas">
+          <div className="site-logo-canvas">
             <img
               className="logo-img"
               src={Logo}
