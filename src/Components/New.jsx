@@ -2,20 +2,34 @@ import "./styles.css";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 const New = () => {
-
-  const [Patient,setPatientId] = useState("")
-  const handlePatientID = (e) =>{
+  const [Patient, setPatientId] = useState("");
+  const handlePatientID = (e) => {
     setPatientId(e.target.value);
-
-  }
-  const handleSubmit = () => {
+  };
+  const handleSubmit = async () => {
     // event.preventDefault();
     console.log(Patient);
     let arg = Patient;
+    let Patientstat = { age: 0, rmt: 0.0, dep: 0 };
     const apiURL = `https://us-east-1.aws.data.mongodb-api.com/app/application-0-erzts/endpoint/find?arg1=${arg}`;
 
-    axios
+    await axios
       .get(apiURL)
+      .then((response) => {
+        console.log("Get request successful:", response.data);
+        // Reset the form after successful submission
+        Patientstat["age"] = response.data["AGE"];
+        Patientstat["rmt"] = response.data["RMT %"];
+        Patientstat["dep"] = response.data["Depression"];
+        console.log(Patientstat);
+      })
+      .catch((error) => {
+        console.error("Error Getting data:", error);
+      });
+    const modelURL = `http://127.0.0.1:5000/god?age=${Patientstat["age"]}&rmt=${Patientstat["rmt"]}&dep=${Patientstat["dep"]}`;
+
+    await axios
+      .get(modelURL)
       .then((response) => {
         console.log("Get request successful:", response.data);
         // Reset the form after successful submission
@@ -23,8 +37,6 @@ const New = () => {
       .catch((error) => {
         console.error("Error Getting data:", error);
       });
-
-      
   };
 
   return (
@@ -56,7 +68,12 @@ const New = () => {
           <h1 className="title2">Enter the following Details</h1>
           <div className="inputGroup2">
             <label for="PatientID">Patient ID :</label>
-            <input type="text" placeholder="Enter Patient ID" id="PatientID" onChange={(e)=>handlePatientID(e)}/>
+            <input
+              type="text"
+              placeholder="Enter Patient ID"
+              id="PatientID"
+              onChange={(e) => handlePatientID(e)}
+            />
           </div>
 
           <button className="button-292" onClick={handleSubmit}>
