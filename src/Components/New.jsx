@@ -26,7 +26,7 @@ const New = () => {
       .catch((error) => {
         console.error("Error Getting data:", error);
       });
-    const modelURL = `http://127.0.0.1:5000/god?age=${Patientstat["age"]}&rmt=${Patientstat["rmt"]}&dep=${Patientstat["dep"]}`;
+    const modelURL = `https://rtms-sitting-predictions-production.up.railway.app/god?age=${Patientstat["age"]}&rmt=${Patientstat["rmt"]}&dep=${Patientstat["dep"]}`;
 
     await axios
       .get(
