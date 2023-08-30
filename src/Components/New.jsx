@@ -46,7 +46,7 @@ const New = () => {
         modelOutput["final_depression"] = response.data["final_depression"];
         modelOutput["no_of_session"] = response.data["no_of_session"];
         console.log("second call to model", modelOutput);
-        await setModelOutput(modelOutput);
+        setModelOutput(modelOutput);
         console.log("usestate data", apiOutput);
         // Reset the form after successful submission
       })
