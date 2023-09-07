@@ -1,6 +1,7 @@
 import "../Components/styles.css";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import LoadingSpinner from "./loadingspin";
 import { useNavigate } from "react-router-dom";
 import { LineChart } from "@mui/x-charts";
 import {
@@ -12,11 +13,42 @@ import {
 } from "@mui/x-charts";
 const Fetch = () => {
   const [PatientID, setPatientId] = useState("");
-  const [fetchedinput, setFetchedinput] = useState(null);
+  const [tendep0, settendep0] = useState([]);
+  const [tendep10, settendep10] = useState([]);
+  const [tendep20, settendep20] = useState([]);
+
+  const [iscaleed, setIscaleed] = useState(false);
   const navigateTo = useNavigate();
+
   const handlePatientID = (e) => {
     setPatientId(e.target.value);
   };
+  // let dep10Values = [];
+  useEffect(() => {
+    // Make the first API call to inputss
+    const fetchData = async () => {
+      try {
+        setIscaleed(false);
+        const response = await axios.get(
+          "https://us-east-1.aws.data.mongodb-api.com/app/application-0-erzts/endpoint/getten"
+        );
+        console.log("response", response.data);
+        settendep0(response.data.slice(0, 10).map((item) => item.Str10));
+        console.log("usestate0", tendep0);
+        settendep10(response.data.slice(0, 10).map((item) => item.Dep10));
+        console.log("usestate10", tendep10);
+        settendep20(response.data.slice(0, 10).map((item) => item.Dep20));
+        console.log("usestate20", tendep20);
+
+        setIscaleed(true);
+      } catch (error) {
+        console.error("Error fetching data from API:", error);
+      }
+    };
+
+    // Call the fetchData function
+    fetchData();
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -71,43 +103,49 @@ const Fetch = () => {
       <div className="outbot">
         <div className="bottomgr">
           <h2>Consolidated Graph for Depression Values</h2>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <LineChart
-              xAxis={[
-                {
-                  data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                  label: "No of Patients",
-                },
-              ]}
-              yAxis={[
-                { id: "linearAxis", scaleType: "linear" },
-                { id: "logAxis", scaleType: "log" },
-              ]}
-              series={[
-                {
-                  data: [35, 16, 26, 34, 42, 12, 42, 42, 36, 16],
-                  name: "RX#0",
-                  curve: "linear",
-                  label: "RX#0",
-                },
-                {
-                  data: [22, 8, 14, 22, 36, 12, 16, 18, 36, 12],
-                  name: "RX#10",
-                  curve: "linear",
-                  label: "RX#10",
-                },
-                {
-                  data: [26, 4, 14, 20, 20, 4, 6, 24, 42, 4],
-                  name: "RX#20",
-                  curve: "linear",
-                  label: "RX#20",
-                },
-                // { data: [10,20,0], name: "madra", curve: "linear", label: "madrass" },
-              ]}
-              width={500}
-              height={300}
-            ></LineChart>
-          </div>
+          {iscaleed ? (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <LineChart
+                xAxis={[
+                  {
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    label: "No of Patients",
+                  },
+                ]}
+                yAxis={[
+                  { id: "linearAxis", scaleType: "linear" },
+                  { id: "logAxis", scaleType: "log" },
+                ]}
+                series={[
+                  {
+                    data: tendep0,
+                    name: "RX#0",
+                    curve: "linear",
+                    label: "RX#0",
+                  },
+                  {
+                    data: tendep10,
+                    name: "RX#10",
+                    curve: "linear",
+                    label: "RX#10",
+                  },
+                  {
+                    data: tendep20,
+                    name: "RX#20",
+                    curve: "linear",
+                    label: "RX#20",
+                  },
+                  // { data: [10,20,0], name: "madra", curve: "linear", label: "madrass" },
+                ]}
+                width={500}
+                height={300}
+              ></LineChart>
+            </div>
+          ) : (
+            <div>
+              <LoadingSpinner />
+            </div>
+          )}
         </div>
       </div>
     </>
